@@ -3,7 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="f77c1c1f-7893-430b-b600-7a9890a7e94f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gee/context.go" beforeDir="false" afterPath="$PROJECT_DIR$/gee/context.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gee/gee.go" beforeDir="false" afterPath="$PROJECT_DIR$/gee/gee.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gee/router.go" beforeDir="false" afterPath="$PROJECT_DIR$/gee/router.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -43,16 +45,27 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/gee" />
+      <recent name="$PROJECT_DIR$/Script/router" />
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager" selected="Go Build.go build github.com/Gee">
+  <component name="RunManager" selected="Go Build.go build github.com/Gee/Script">
     <configuration name="go build github.com/Gee" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="Gee" />
       <working_directory value="$PROJECT_DIR$" />
       <kind value="PACKAGE" />
       <filePath value="$PROJECT_DIR$/main.go" />
       <package value="github.com/Gee" />
+      <directory value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="go build github.com/Gee/Script" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="Gee" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <filePath value="$PROJECT_DIR$/Script/probe.go" />
+      <package value="github.com/Gee/Script" />
       <directory value="$PROJECT_DIR$" />
       <method v="2" />
     </configuration>
@@ -67,6 +80,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Go Build.go build github.com/Gee/Script" />
         <item itemvalue="Go Build.go build github.com/Gee" />
         <item itemvalue="Go Build.go build github.com/Gee/base" />
       </list>
@@ -89,5 +103,16 @@
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/Script/probe.go</url>
+          <line>29</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

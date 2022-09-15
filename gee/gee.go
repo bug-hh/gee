@@ -7,17 +7,17 @@ import (
 type HandleFunc func(ctx *Context)
 
 type Engine struct {
-	router *router
+	router *Router
 }
 
 func New() *Engine {
 	return &Engine{
-		router: newRouter(),
+		router: NewRouter(),
 	}
 }
 
 func (engine *Engine) addRoute(method string, pattern string, handler HandleFunc) {
-	engine.router.addRoute(method, pattern, handler)
+	engine.router.AddRouter(method, pattern, handler)
 }
 
 func (engine *Engine) GET(pattern string, handler HandleFunc) {

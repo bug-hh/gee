@@ -17,12 +17,16 @@ func main() {
 		ctx.String(http.StatusOK, "hello %s, you're at %s\n", ctx.Query("name"), ctx.Path)
 	})
 
-	r.POST("/login", func(ctx *gee.Context) {
+	r.GET("/hello/:name", func(ctx *gee.Context) {
+		ctx.String(http.StatusOK, "hello %s, you're at %s\n", ctx.Params["name"], ctx.Path)
+	})
+
+	r.GET("/assets/*filepath", func(ctx *gee.Context) {
 		ctx.JSON(http.StatusOK, gee.H{
-			"username": ctx.PostForm("username"),
-			"password": ctx.PostForm("password"),
+			"filepath": ctx.Param("filepath"),
 		})
 	})
+
 	r.Run(":9999")
 }
 
