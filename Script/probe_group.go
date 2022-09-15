@@ -5,7 +5,6 @@ import (
 	"net/http"
 )
 
-
 func main() {
 	engine := gee.New()
 	engine.GET("/index", func(ctx *gee.Context) {
