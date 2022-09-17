@@ -3,6 +3,7 @@ package gee
 import (
 	"log"
 	"net/http"
+	"strings"
 )
 
 type HandleFunc func(ctx *Context)
@@ -30,6 +31,11 @@ func New() *Engine {
 	}
 	engine.groups = []*RouterGroup{engine.RouterGroup}
 	return engine
+}
+
+// 把这里写成了 group RouterGroup 而不是写指针类型，导致中间件不起作用，添加失败
+func (group *RouterGroup) Use(middlewares ...HandleFunc) {
+	group.middlewares = append(group.middlewares, middlewares...)
 }
 
 func (group *RouterGroup) Group(prefix string) *RouterGroup {
@@ -75,6 +81,17 @@ func (engine *Engine) Run(addr string) (err error) {
 }
 
 func (engine *Engine) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+	var middlewares []HandleFunc
+	// 当我们接收到一个具体请求时，要判断该请求适用于哪些中间件
+	// 这里只遍历了 group 的 middleware，还没有遍历全局的 middleware，也就是说，全局的 middleware 还没有加入 context 中
+	for _, group := range engine.groups {
+		if strings.HasPrefix(req.URL.Path, group.prefix) {
+			middlewares = append(middlewares, group.middlewares...)
+		}
+	}
+
 	c := newContext(w, req)
+	// 得到中间件列表后，赋值给 c.handlers
+	c.handlers = middlewares
 	engine.router.handle(c)
 }

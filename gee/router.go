@@ -80,10 +80,14 @@ func (r *Router) handle(c *Context) {
 		c.Params = params
 		// 所以这个地方用 c.Method + "-" + n.Pattern 来做 key，而不是  c.Method + "-" + c.Path
 		key := c.Method + "-" + n.Pattern
-		r.handlers[key](c)
+		// 这里添加的是用于处理具体请求的 handler，而不是中间件，虽然「处理具体请求的 handler」和 「中间件」都是 HandleFunc 类型
+		c.handlers = append(c.handlers, r.handlers[key])
 	} else {
 		log.Printf("not found %s-%s", c.Method, c.Path)
-		c.String(http.StatusNotFound, "404 NOT FOUND: %s\n", c.Path)
+		c.handlers = append(c.handlers, func(ctx *Context) {
+			c.String(http.StatusNotFound, "404 NOT FOUND: %s\n", c.Path)
+		})
 	}
+	c.Next()
 }
 
