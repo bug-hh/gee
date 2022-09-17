@@ -29,6 +29,7 @@ type Engine struct {
 	funcMap template.FuncMap
 }
 
+
 func New() *Engine {
 	engine := &Engine{
 		router: NewRouter(),
@@ -37,6 +38,12 @@ func New() *Engine {
 		engine: engine,
 	}
 	engine.groups = []*RouterGroup{engine.RouterGroup}
+	return engine
+}
+
+func Default() *Engine {
+	engine := New()
+	engine.Use(Logger(), Recovery())
 	return engine
 }
 
