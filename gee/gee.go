@@ -1,8 +1,11 @@
 package gee
 
 import (
+	// go template 的用法 https://www.cnblogs.com/f-ck-need-u/p/10053124.html
+	"html/template"
 	"log"
 	"net/http"
+	"path"
 	"strings"
 )
 
@@ -20,6 +23,10 @@ type Engine struct {
 	*RouterGroup
 	router *Router
 	groups []*RouterGroup
+	// 用来加载模板
+	htmlTemplates *template.Template
+	// 模板渲染函数
+	funcMap template.FuncMap
 }
 
 func New() *Engine {
@@ -31,6 +38,38 @@ func New() *Engine {
 	}
 	engine.groups = []*RouterGroup{engine.RouterGroup}
 	return engine
+}
+
+func (engine *Engine) SetFuncMap(funcMap template.FuncMap) {
+	engine.funcMap = funcMap
+}
+
+// 这里一定加 *，用指针
+func (engine *Engine) LoadHTMLGlob(pattern string) {
+	engine.htmlTemplates = template.Must(template.New("").Funcs(engine.funcMap).ParseGlob(pattern))
+	
+}
+func (group *RouterGroup) createStaticHandler(relativePath string, fs http.FileSystem) HandleFunc {
+	absolutePath := path.Join(group.prefix, relativePath)
+	fileServer := http.StripPrefix(absolutePath, http.FileServer(fs))
+	return func(ctx *Context) {
+		file := ctx.Param("filepath")
+		log.Printf("file: %s", file)
+		if _, err := fs.Open(file); err != nil {
+			log.Printf("not found")
+			ctx.Status(http.StatusNotFound)
+			return
+		}
+		fileServer.ServeHTTP(ctx.Writer, ctx.Req)
+	}
+}
+
+func (group *RouterGroup) Static(relativePath string, root string) {
+	handler := group.createStaticHandler(relativePath, http.Dir(root))
+	log.Printf("group.prefix: %s", group.prefix)
+	urlPattern := path.Join(relativePath, "/*filepath")
+
+	group.GET(urlPattern, handler)
 }
 
 // 把这里写成了 group RouterGroup 而不是写指针类型，导致中间件不起作用，添加失败
@@ -93,5 +132,6 @@ func (engine *Engine) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	c := newContext(w, req)
 	// 得到中间件列表后，赋值给 c.handlers
 	c.handlers = middlewares
+	c.engine = engine
 	engine.router.handle(c)
 }
